@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ff6fc490-edd4-439c-85a4-0f64d3901170" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/enums/ResizeType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/BatchResizer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/BatchWatermarker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/ResizeTask.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/WatermarkTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/HelloApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/HelloController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/controller/DragHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/controller/DragHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/project/imagewatermark/design.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/project/imagewatermark/design.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/project/imagewatermark/hello-view.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/HelloApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/HelloController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/DragHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/DragHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageResizeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageResizeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageWatermarker.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageWatermarker.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/design.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/design.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/hello-view.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2WRCDWyEufvQEoFamNg50oMYDN1" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/khantzawhein/CMU/AdvProgramming/se233-project1-wnk",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="se233-project1-wnk" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="se233-project1-wnk" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ff6fc490-edd4-439c-85a4-0f64d3901170" name="Changes" comment="" />
+      <created>1696685886637</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696685886637</updated>
+      <workItem from="1696685887735" duration="5767000" />
+      <workItem from="1696692750524" duration="4930000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

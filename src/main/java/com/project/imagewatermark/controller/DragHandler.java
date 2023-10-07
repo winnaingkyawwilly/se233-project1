@@ -1,11 +1,12 @@
 package com.project.imagewatermark.controller;
 
+import com.project.imagewatermark.enums.ResizeType;
+import com.project.imagewatermark.jobs.BatchResizer;
+import com.project.imagewatermark.jobs.BatchWatermarker;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -13,18 +14,22 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipException;
+
 public class DragHandler {
 
     @FXML
@@ -35,32 +40,41 @@ public class DragHandler {
     private Button prevButton;
     @FXML
     private Button nextButton;
-
     @FXML
     private ImageView imageView = new ImageView();
-
     @FXML
     private TextField watermarkInput = new TextField();
-
     @FXML
     private ColorPicker watermarkColor = new ColorPicker();
-
     @FXML
     private Slider sizeSlider = new Slider();
-
     @FXML
     private Slider rotationSlider = new Slider();
-
     @FXML
     private Slider opacitySlider = new Slider();
     private List<Image> images = new ArrayList<>();
+    private ArrayList<File> files = new ArrayList<>();
+
     private int currentImageIndex = -1;
-
     protected List<File> img_data;
-
-    List<Image> toSave = new ArrayList<>();
-
+    ArrayList<Image> toSave = new ArrayList<>();
     private ImageWatermarker watermarker = new ImageWatermarker();
+
+    // Resize Variables
+
+    @FXML
+    private TextField resizeValue;
+    @FXML
+    private Button resizePercentBtn, resizeWidthBtn, resizeHeightBtn;
+    @FXML
+    private ColorPicker resizeImgBgColor;
+    @FXML
+    private Slider resizeImgQuality;
+    @FXML
+    private ProgressBar resizeProgressBar, watermarkProgressBar;
+    @FXML
+    private ComboBox<String> resizeImgFormat, watermarkOutputFormat;
+
 
     @FXML
     public void initialize() {
@@ -77,6 +91,39 @@ public class DragHandler {
         sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> updateWatermarkPreview());
         rotationSlider.valueProperty().addListener((observable, oldValue, newValue) -> updateWatermarkPreview());
         opacitySlider.valueProperty().addListener((observable, oldValue, newValue) -> updateWatermarkPreview());
+
+
+        // Resize Section
+
+        resizePercentBtn.setOnAction(event -> resize(ResizeType.PERCENTAGE));
+        resizeWidthBtn.setOnAction(event -> resize(ResizeType.WIDTH));
+        resizeHeightBtn.setOnAction(event -> resize(ResizeType.HEIGHT));
+        resizeImgFormat.getItems().addAll("PNG", "JPEG");
+        resizeImgFormat.getSelectionModel().selectFirst();
+
+
+        watermarkOutputFormat.getItems().addAll("PNG", "JPEG");
+        watermarkOutputFormat.getSelectionModel().selectFirst();
+
+
+    }
+
+    private void resize(ResizeType resizeType) {
+        int value = Integer.parseInt(resizeValue.getText());
+        Color bgColor = resizeImgBgColor.getValue();
+        double quality = resizeImgQuality.getValue() / 100.0f;
+        String imageFormat = resizeImgFormat.getValue();
+
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        File selectedDirectory = directoryChooser.showDialog(new Stage());
+
+        if (selectedDirectory != null) {
+            BatchResizer batchResizer = new BatchResizer(this.files, resizeType, value, selectedDirectory, bgColor, imageFormat, quality);
+            resizeProgressBar.progressProperty().bind(batchResizer.progressProperty());
+            new Thread(batchResizer).start();
+        }
     }
 
     @FXML
@@ -109,6 +156,8 @@ public class DragHandler {
                     try {
                         img = new Image(new FileInputStream(file));
                         images.add(img);
+                        toSave.add(img);
+                        this.files.add(file);
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -117,6 +166,8 @@ public class DragHandler {
                     List<Image> extractedImages = extractImagesFromZip(file);
                     if (!extractedImages.isEmpty()) {
                         images.addAll(extractedImages);
+                        toSave.addAll(extractedImages);
+
                     }
                 }
             }
@@ -142,41 +193,45 @@ public class DragHandler {
         try (ZipArchiveInputStream zis = new ZipArchiveInputStream(new FileInputStream(zipFile))) {
             ZipArchiveEntry entry;
             while ((entry = zis.getNextZipEntry()) != null) {
-                if (isSupportedImageFile(new File(entry.getName()))) {
+                File file = new File(entry.getName());
+                if (isSupportedImageFile(file)) {
                     BufferedImage bufferedImage = ImageIO.read(zis);
                     Image img = SwingFXUtils.toFXImage(bufferedImage, null);
                     extractedImages.add(img);
+                    files.add(file);
                 }
             }
+        } catch (ZipException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ZIP file").showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error reading ZIP file").showAndWait();
         }
         return extractedImages;
     }
 
 
-    private boolean isSupportedImageFile( File file) {
+    private boolean isSupportedImageFile(File file) {
         String fileName = file.getName().toLowerCase();
         return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png");
     }
 
     private void showPreviousImage() {
-        if (!images.isEmpty()) {
-            currentImageIndex = (currentImageIndex - 1 + images.size()) % images.size();
+        if (!toSave.isEmpty()) {
+            currentImageIndex = (currentImageIndex - 1 + toSave.size()) % toSave.size();
             updateImageView();
         }
     }
 
     private void showNextImage() {
-        if (!images.isEmpty()) {
-            currentImageIndex = (currentImageIndex + 1) % images.size();
+        if (!toSave.isEmpty()) {
+            currentImageIndex = (currentImageIndex + 1) % toSave.size();
             updateImageView();
         }
     }
 
     private void updateImageView() {
-        if (currentImageIndex >= 0 && currentImageIndex < images.size()) {
-            Image img = images.get(currentImageIndex);
+        if (currentImageIndex >= 0 && currentImageIndex < toSave.size()) {
+            Image img = toSave.get(currentImageIndex);
             imageView.setImage(img);
             vbox.getChildren().clear();
             vbox.getChildren().add(imageView);
@@ -202,11 +257,7 @@ public class DragHandler {
                 Image watermarkedImage = watermarker.addWatermark(img, watermarkText, newColor, newSize, newOpacity, rotationAngle);
                 watermarkedImages.add(watermarkedImage);
             }
-
-            // Clear the existing images in the toSave list
             toSave.clear();
-
-            // Add the new watermarked images to the toSave list
             toSave.addAll(watermarkedImages);
 
             // Display the watermarked images
@@ -219,82 +270,31 @@ public class DragHandler {
     @FXML
     private void saveImagesAsPngJpg() {
         if (!toSave.isEmpty()) {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("PNG Images", "*.png"),
-                    new FileChooser.ExtensionFilter("JPEG Images", "*.jpg", "*.jpeg")
-            );
-            fileChooser.setTitle("Save Watermarked Images");
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Save Watermarked Images");
+            File selectedDirectory = directoryChooser.showDialog(new Stage());
 
-            // Show the file save dialog
-            File selectedFile = fileChooser.showSaveDialog(new Stage());
-
-            if (selectedFile != null) {
+            if (selectedDirectory != null) {
                 // Save as individual PNG or JPG files
-                saveImagesAsIndividualFiles(selectedFile);
+                Task<Void> batchWatermarkTask = new BatchWatermarker(toSave, selectedDirectory, watermarkOutputFormat.getValue());
+                watermarkProgressBar.progressProperty().bind(batchWatermarkTask.progressProperty());
+
+                (new Thread(batchWatermarkTask)).start();
             }
         }
     }
-
-    @FXML
-    private void saveImagesAsZip() {
-        if (!toSave.isEmpty()) {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ZIP Files", "*.zip"));
-            fileChooser.setTitle("Save Watermarked Images as ZIP");
-
-            // Show the file save dialog
-            File selectedFile = fileChooser.showSaveDialog(new Stage());
-
-            if (selectedFile != null) {
-                // Save as a ZIP file
-                saveImagesAsZip(selectedFile);
-            }
-        }
-    }
-
 
     private String getFileExtension(String fileName) {
-        int lastDotIndex = fileName.lastIndexOf('.');
-        if (lastDotIndex >= 0) {
-            return fileName.substring(lastDotIndex + 1).toLowerCase();
-        }
-        return null;
-    }
-
-    private void saveImagesAsZip(File zipFile) {
-        try (FileOutputStream fos = new FileOutputStream(zipFile);
-             ZipArchiveOutputStream zos = new ZipArchiveOutputStream(fos)) {
-
-            // Iterate through watermarked images
-            for (int i = 0; i < toSave.size(); i++) {
-                Image imgToSave = toSave.get(i);
-                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(imgToSave, null);
-
-                // Determine the file name based on the image format
-                String imageFormat = getFileExtension(zipFile.getName());
-                String fileName = "watermarked_image_" + i + "." + imageFormat;
-
-                // Create a new ZIP entry for the image
-                ZipArchiveEntry zipEntry = new ZipArchiveEntry(fileName);
-                zos.putArchiveEntry(zipEntry);
-
-                // Write the image data to the ZIP file
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ImageIO.write(bufferedImage, imageFormat, byteArrayOutputStream);
-                zos.write(byteArrayOutputStream.toByteArray());
-
-                zos.closeArchiveEntry();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return FilenameUtils.getExtension(fileName);
     }
 
     private void saveImagesAsIndividualFiles(File saveDirectory) {
         for (int i = 0; i < toSave.size(); i++) {
             Image imgToSave = toSave.get(i);
             BufferedImage bufferedImage = SwingFXUtils.fromFXImage(imgToSave, null);
+
+            BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+            newBufferedImage.createGraphics().drawImage(bufferedImage, null, 0, 0);
 
             // Determine the file name based on the image format
             String imageFormat = getFileExtension(saveDirectory.getName());
@@ -303,7 +303,7 @@ public class DragHandler {
             File file = new File(saveDirectory.getParentFile(), fileName);
 
             try {
-                ImageIO.write(bufferedImage, imageFormat, file);
+                ImageIO.write(newBufferedImage, imageFormat, file);
             } catch (IOException e) {
                 e.printStackTrace();
             }

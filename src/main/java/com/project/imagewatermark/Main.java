@@ -13,12 +13,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(Main.class.getResource("design.fxml"));
-        stage.setTitle("Hello World");
+        stage.setTitle("Photo Edit");
         stage.setScene(new Scene(root));
         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

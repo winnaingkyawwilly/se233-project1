@@ -2,6 +2,9 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -11,6 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="798.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.imagewatermark.controller.DragHandler">
@@ -30,27 +34,48 @@
                         <Text layoutX="14.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Input Watermark text" />
                         <TextField fx:id="watermarkInput" layoutX="12.0" layoutY="370.0" onAction="#updateWatermarkPreview" />
                         <Slider fx:id="rotationSlider" blockIncrement="2.5" layoutX="12.0" layoutY="438.0" majorTickUnit="10.0" max="360.0" minorTickCount="5" onDragDetected="#updateWatermarkPreview" prefHeight="24.0" prefWidth="302.0" showTickMarks="true" />
-                        <Text layoutX="12.0" layoutY="424.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rotate the Watermark" />
+                        <Text layoutX="12.0" layoutY="424.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rotate" />
                         <Text layoutX="536.0" layoutY="351.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Preview" />
                         <Slider fx:id="sizeSlider" blockIncrement="5.0" layoutX="12.0" layoutY="497.0" majorTickUnit="10.0" max="500.0" minorTickCount="5" onDragDetected="#updateWatermarkPreview" prefHeight="24.0" prefWidth="302.0" showTickMarks="true" value="50.0" />
-                        <Text layoutX="17.0" layoutY="483.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size" />
+                        <Text layoutX="17.0" layoutY="483.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Font Size" />
                         <ColorPicker fx:id="watermarkColor" layoutX="17.0" layoutY="623.0" onAction="#updateWatermarkPreview" />
-                        <Text layoutX="17.0" layoutY="610.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Backgroud Color" />
+                        <Text layoutX="17.0" layoutY="610.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text Color:" />
                         <Text layoutX="12.0" layoutY="548.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Visibility" />
                         <Slider fx:id="opacitySlider" blockIncrement="0.01" layoutX="12.0" layoutY="561.0" majorTickUnit="0.1" max="1.0" minorTickCount="5" onDragDetected="#updateWatermarkPreview" prefHeight="24.0" prefWidth="302.0" showTickMarks="true" value="1.0" />
                         <Button fx:id="addWatermark" layoutX="183.0" layoutY="370.0" mnemonicParsing="false" onAction="#updateWatermarkPreview" text="Add" />
-                        <Button layoutX="723.0" layoutY="687.0" mnemonicParsing="false" onAction="#saveImagesAsZip" prefHeight="28.0" prefWidth="86.0" text="Save as Zip" />
-                        <Button layoutX="822.0" layoutY="687.0" mnemonicParsing="false" onAction="#saveImagesAsPngJpg" prefHeight="28.0" prefWidth="114.0" text="Save as png/jpg" />
-                        <Button fx:id="widthButton" layoutX="810.0" layoutY="497.0" mnemonicParsing="false" text="Width" />
-                        <Button fx:id="scaleButton" layoutX="810.0" layoutY="450.0" mnemonicParsing="false" text="Percent" />
-                        <Button fx:id="heightButton" layoutX="810.0" layoutY="549.0" mnemonicParsing="false" text="Height" />
-                        <TextField fx:id="scaleInput" layoutX="611.0" layoutY="450.0" />
-                        <TextField fx:id="widthInput" layoutX="611.0" layoutY="497.0" />
-                        <TextField fx:id="heightInput" layoutX="611.0" layoutY="549.0" />
-                        <Button fx:id="saveButton" layoutX="620.0" layoutY="687.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="86.0" text="Save Resize" />
+                        <Button layoutX="732.0" layoutY="651.0" mnemonicParsing="false" onAction="#saveImagesAsPngJpg" prefHeight="64.0" prefWidth="204.0" text="Save..." />
+                        <ProgressBar fx:id="watermarkProgressBar" layoutX="22.0" layoutY="690.0" prefWidth="200.0" progress="0.0" />
+                        <Text layoutX="22.0" layoutY="679.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Export Progress:" />
+                        <Text layoutX="436.0" layoutY="671.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Output Format" />
+                        <ComboBox fx:id="watermarkOutputFormat" layoutX="436.0" layoutY="688.0" prefWidth="150.0" />
                      </children></AnchorPane>
             </content>
           </Tab>
+            <Tab text="Resize">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="resizeValue" layoutX="320.0" layoutY="127.0" prefHeight="39.0" prefWidth="309.0" promptText="Enter value" />
+                        <Button fx:id="resizeWidthBtn" layoutX="429.0" layoutY="544.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="94.0" text="Width" />
+                        <Button fx:id="resizePercentBtn" layoutX="288.0" layoutY="544.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="94.0" text="Percent" />
+                        <Button fx:id="resizeHeightBtn" layoutX="569.0" layoutY="544.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="94.0" text="Height" />
+                        <Slider fx:id="resizeImgQuality" layoutX="340.0" layoutY="297.0" prefHeight="38.0" prefWidth="261.0" showTickLabels="true" showTickMarks="true" value="80.0" />
+                        <Label layoutX="340.0" layoutY="269.0" text="Image Quality:" />
+                        <Label layoutX="288.0" layoutY="73.0" prefHeight="26.0" prefWidth="361.0" text="Enter appropriate percent, width or height">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="340.0" layoutY="197.0" text="Image Background:" />
+                        <ColorPicker fx:id="resizeImgBgColor" layoutX="340.0" layoutY="228.0" prefHeight="26.0" prefWidth="131.0" />
+                        <Label layoutX="344.0" layoutY="342.0" text="Image Format" />
+                        <ComboBox fx:id="resizeImgFormat" layoutX="343.0" layoutY="366.0" prefWidth="150.0" />
+                        <Label layoutX="344.0" layoutY="413.0" text="Progress" />
+                        <ProgressBar fx:id="resizeProgressBar" layoutX="345.0" layoutY="440.0" prefWidth="200.0" progress="0.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>
