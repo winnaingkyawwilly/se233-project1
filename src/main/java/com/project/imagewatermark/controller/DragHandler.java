@@ -26,8 +26,12 @@ import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import java.util.zip.ZipException;
 
 public class DragHandler {
@@ -157,13 +161,18 @@ public class DragHandler {
                         img = new Image(new FileInputStream(file));
                         images.add(img);
                         toSave.add(img);
-                        this.files.add(file);
-                    } catch (FileNotFoundException e) {
+                        // Copy file to temp directory
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 } else if (isZipFile(file)) {
                     // Handle ZIP files
-                    List<Image> extractedImages = extractImagesFromZip(file);
+                    List<Image> extractedImages = null;
+                    try {
+                        extractedImages = extractImagesFromZip(file);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     if (!extractedImages.isEmpty()) {
                         images.addAll(extractedImages);
                         toSave.addAll(extractedImages);
@@ -188,22 +197,43 @@ public class DragHandler {
         return fileName.endsWith(".zip");
     }
 
-    private List<Image> extractImagesFromZip(File zipFile) {
+    private List<Image> extractImagesFromZip(File zipFile) throws IOException {
         List<Image> extractedImages = new ArrayList<>();
+        String tmpDir = System.getProperty("java.io.tmpdir") + "photo-edit/unzip/"
+                + zipFile.getName().replace(".zip", "") + "/";
+        Path tmpDirFile = Paths.get(tmpDir);
+        if (Files.exists(tmpDirFile)) {
+            Stream<Path> walk = Files.walk(tmpDirFile);
+            walk.map(Path::toFile).forEach(File::delete);
+            walk.close();
+        }
         try (ZipArchiveInputStream zis = new ZipArchiveInputStream(new FileInputStream(zipFile))) {
             ZipArchiveEntry entry;
             while ((entry = zis.getNextZipEntry()) != null) {
                 File file = new File(entry.getName());
+                Path tempFilePath = Paths.get(tmpDir, entry.getName());
+
+                File tempFile = tempFilePath.toFile();
+                if (entry.isDirectory()) {
+                    tempFile.mkdirs();
+                } else {
+                    File parent = tempFile.getParentFile();
+                    if (!parent.isDirectory()) {
+                        parent.mkdirs();
+                    }
+                }
+                Files.copy(zis, tempFilePath);
                 if (isSupportedImageFile(file)) {
-                    BufferedImage bufferedImage = ImageIO.read(zis);
+                    BufferedImage bufferedImage = ImageIO.read(tempFile);
                     Image img = SwingFXUtils.toFXImage(bufferedImage, null);
                     extractedImages.add(img);
-                    files.add(file);
+                    files.add(tempFile);
                 }
             }
         } catch (ZipException e) {
             new Alert(Alert.AlertType.ERROR, "Invalid ZIP file").showAndWait();
         } catch (IOException e) {
+            e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error reading ZIP file").showAndWait();
         }
         return extractedImages;

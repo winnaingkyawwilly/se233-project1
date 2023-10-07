@@ -5,28 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff6fc490-edd4-439c-85a4-0f64d3901170" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/enums/ResizeType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/BatchResizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/BatchWatermarker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/ResizeTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/jobs/WatermarkTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/HelloApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/HelloController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/controller/DragHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/controller/DragHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/project/imagewatermark/design.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/project/imagewatermark/design.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/project/imagewatermark/hello-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/HelloApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/HelloController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/imagewatermark/controller/ImageResizeController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/DragHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/DragHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageResizeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageResizeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageWatermarker.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageWatermarker.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/design.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/design.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/hello-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/project/imagewatermark/controller/ImageResizeController.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +79,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696685886637</updated>
       <workItem from="1696685887735" duration="5767000" />
-      <workItem from="1696692750524" duration="4930000" />
+      <workItem from="1696692750524" duration="8600000" />
     </task>
     <servers />
   </component>
